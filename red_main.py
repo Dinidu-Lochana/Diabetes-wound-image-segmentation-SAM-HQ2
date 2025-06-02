@@ -23,15 +23,24 @@ from sam2.sam2_image_predictor import SAM2ImagePredictor
 # Import YOLOv8
 from ultralytics import YOLO
 
-# -------------------------- Load Image --------------------------
-image_path = "test_10/test10.jpg"
+# -------------------------- Load Image with Red Channel --------------------------
+image_path = "inputs/test18.jpg"  # Replace this with your image upload logic if needed
 image_bgr = cv2.imread(image_path)
 if image_bgr is None:
     raise FileNotFoundError(f"❌ Image not found at: {image_path}")
-image_rgb = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2RGB)
+
+# Extract only the red channel
+red_channel = image_bgr[:, :, 2]  # OpenCV uses BGR, so index 2 is red
+
+# Convert single channel to 3-channel by repeating red channel
+image_r_rgb = cv2.merge([red_channel, red_channel, red_channel])  # fake RGB using red
+
+# This is now used in YOLO and SAM pipeline
+image_rgb = image_r_rgb
+
 
 # -------------------------- Run YOLOv8 --------------------------
-yolo_model = YOLO("runs/detect/train16/weights/best.pt")
+yolo_model = YOLO("runs/detect/train20/weights/best.pt")
 results = yolo_model(image_path)[0]  # Get first result
 
 # Extract original boxes and prompt points
@@ -109,10 +118,10 @@ for i in range(len(original_boxes)):
 
 # -------------------------- Save & Show --------------------------
 plt.axis('off')
-os.makedirs("outputs_testing_from_GPT", exist_ok=True)
+os.makedirs("outputs_SAM_HQ2_cropped_image", exist_ok=True)
 
 # Auto-increment output filename
-output_dir = "outputs_testing/outputs_testing_from_GPT"
+output_dir = "outputs_SAM_HQ2_cropped_image"
 os.makedirs(output_dir, exist_ok=True)
 
 # Find next available file name

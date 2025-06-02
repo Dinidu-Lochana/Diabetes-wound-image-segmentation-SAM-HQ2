@@ -13,4 +13,7 @@ wound_dataset
 sam_hq_old_repo
 outputs_SAM_HQ2_cropped_image
 All inputs
-
+wound_dataset_red
+wound_dataset_groundingDino
+weights
+GroundingDino
