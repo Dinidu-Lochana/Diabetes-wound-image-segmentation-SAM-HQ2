@@ -11,7 +11,8 @@ if image is None:
 
 # Bounding box coordinates (x_min, y_min, x_max, y_max)
 bounding_boxes = [
-    (2, 0, 564, 564)
+    (79, 39, 17, 17),
+    (16, 44, 17, 21)
 ]
 
 # Draw bounding boxes
